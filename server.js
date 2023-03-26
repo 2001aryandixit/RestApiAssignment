@@ -6,6 +6,7 @@ const users = [];
 
 app.use(express.json());
 
+//Register
 app.post('/register', (req, res) => {
   const { name, username, email, password } = req.body;
 
@@ -20,7 +21,7 @@ app.post('/register', (req, res) => {
   res.send('User registered successfully');
 });
 
-
+//Login
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   const user = users.find(user => user.username === username);
@@ -36,7 +37,7 @@ app.post('/login', (req, res) => {
   res.send('User logged in successfully');
 });
 
-// API to get info (name, email, username) for the logged in user
+//Get user
 app.get('/user', (req, res) => {
   const { username } = req.query;
 
@@ -44,7 +45,6 @@ app.get('/user', (req, res) => {
     return res.status(401).send('Unauthorized');
   }
 
-  // get user info
   const user = users.find(user => user.username === username);
 
   if (!user) {
@@ -55,37 +55,38 @@ app.get('/user', (req, res) => {
   res.send(userInfo);
 });
 
-// API to logout the user who is logged in
+
+//Logout
 app.post('/logout', (req, res) => {
-  // clear logged in user info
+  
   req.query.username = null;
   res.send('User logged out successfully');
 });
 
-// API to update user info (name, email)
+//Update user
 app.put('/user', (req, res) => {
   const { username, name, email } = req.body;
 
-  // check if user is logged in
+  
   if (!username) {
     return res.status(401).send('Unauthorized');
   }
 
-  // get user info
+  
   const user = users.find(user => user.username === username);
 
   if (!user) {
     return res.status(400).send('User not found');
   }
 
-  // update user info
+  
   user.name = name;
   user.email = email;
 
   res.send('User info updated successfully');
 });
 
-// start server
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
